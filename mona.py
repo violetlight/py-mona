@@ -36,6 +36,10 @@ while True:
             pygame.quit()
             sys.exit()
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                print "enter"
+
     SCREEN.blit(canvas, canvas_rect)
 
     pygame.display.update()
