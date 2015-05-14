@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import pygame, sys
 from os import path
 
