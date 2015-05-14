@@ -1,6 +1,29 @@
 #!/usr/bin/env python
-import pygame, sys
+import pygame
+import Image
+
+from itertools import izip
 from os import path
+import sys
+
+def compare_surfaces(pg_canvas, pg_seed):
+    canvas_str = pygame.image.tostring(pg_canvas, "RGBA")
+    seed_str = pygame.image.tostring(pg_seed, "RGBA")
+
+    i_canvas = Image.fromstring("RGBA", pg_canvas.get_size(), canvas_str)
+    i_seed = Image.fromstring("RGBA", pg_seed.get_size(), seed_str)
+
+    pairs = izip(i_canvas.getdata(), i_seed.getdata())
+
+    if len(i_canvas.getbands()) == 1:
+        # grayscale
+        dif = sum(abs(p1-p2) for p1,p2 in pairs)
+    else:
+        #color
+        dif = sum(abs(c1-c2) for p1,p2 in pairs for c1,c2 in zip(p1,p2))
+
+    ncomponents = i_canvas.size[0] * i_canvas.size[1] * 3
+    print "Difference (percentage):", (dif / 255.0 * 100) / ncomponents
 
 
 
@@ -38,7 +61,7 @@ while True:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                print "enter"
+                compare_surfaces(canvas, seed)
 
     SCREEN.blit(canvas, canvas_rect)
 
