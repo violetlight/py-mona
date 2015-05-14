@@ -4,9 +4,32 @@ import Image
 
 from itertools import izip
 from os import path
+import random
 import sys
 
 import lib.ptvLIB as ptv # for transparent polygons
+
+
+class Polygon(object):
+    def __init__(self, alpha):
+        self.points = []
+        self.color = [0,0,0]
+        self.alpha = alpha
+
+
+
+def mutate(dna):
+    polygon = random.choice(dna)
+
+    # a dice roll is decidedly random
+    diceroll = random.randint(0,2)
+    if diceroll == 0:
+        polygon.points[random.randint(0, len(polygon.points)-1)] = [random.randint(0, SCREEN_W/2), random.randint(0, SCREEN_H)]
+    if diceroll == 1:
+        polygon.color[random.randint(0, 2)] = random.randint(0, 255)
+    if diceroll == 2:
+        polygon.alpha = random.randint(0,100)
+
 
 def compare_surfaces(pg_canvas, pg_seed):
     canvas_str = pygame.image.tostring(pg_canvas, "RGBA")
@@ -47,9 +70,9 @@ if __name__ == "__main__":
 
     # need to use pygame surfarrays
 
-    SCREENW = seed.get_width() * 2
-    SCREENH = seed.get_height()
-    SCREEN = pygame.display.set_mode((SCREENW, SCREENH))
+    SCREEN_W = seed.get_width() * 2
+    SCREEN_H = seed.get_height()
+    SCREEN = pygame.display.set_mode((SCREEN_W, SCREEN_H))
     pygame.display.set_caption("Image evolver")
 
     SCREEN.blit(seed, seed_rect)
@@ -58,12 +81,27 @@ if __name__ == "__main__":
     WHITE = pygame.Color(255, 255, 255)
 
 
+def generate_dna(polygons=50, vertices=4, alpha=50):
+    dna = []
+    for i in range(polygons):
+        poly = Polygon(alpha)
+        for j in range(vertices):
+            poly.points.append([
+                random.randint(0, SCREEN_W/2),
+                random.randint(0, SCREEN_H)
+            ])
+        dna.append(poly)
+    return dna
 
+def draw_polygons(dna):
+    for polygon in dna:
+        ptv.draw_alpha_polygon(canvas, polygon.color, (0,0), polygon.points, polygon.alpha)
+
+dna = generate_dna()
 while True:
     canvas.fill(WHITE) # actually only fill the surface we are working on
-    ptv.draw_alpha_polygon(canvas, (100,0,0, 50), (0,0), [(10,10), (200,300), (10,300)], 50)
-    ptv.draw_alpha_polygon(canvas, (100,33,70,50), (0,0), [(10,30), (210,300), (10,280)], 50)
-
+    mutate(dna)
+    draw_polygons(dna)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
