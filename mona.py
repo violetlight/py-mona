@@ -6,6 +6,8 @@ from itertools import izip
 from os import path
 import sys
 
+import lib.ptvLIB as ptv # for transparent polygons
+
 def compare_surfaces(pg_canvas, pg_seed):
     canvas_str = pygame.image.tostring(pg_canvas, "RGBA")
     seed_str = pygame.image.tostring(pg_seed, "RGBA")
@@ -27,7 +29,11 @@ def compare_surfaces(pg_canvas, pg_seed):
 
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print "ERROR: Provide a path to an image as the only argument."
+        sys.exit()
+
     pygame.init()
     clock = pygame.time.Clock()
 
@@ -44,15 +50,20 @@ if __name__ == '__main__':
     SCREENW = seed.get_width() * 2
     SCREENH = seed.get_height()
     SCREEN = pygame.display.set_mode((SCREENW, SCREENH))
-    pygame.display.set_caption('Image evolver')
+    pygame.display.set_caption("Image evolver")
 
     SCREEN.blit(seed, seed_rect)
 
     # color constants
     WHITE = pygame.Color(255, 255, 255)
 
+
+
 while True:
     canvas.fill(WHITE) # actually only fill the surface we are working on
+    ptv.draw_alpha_polygon(canvas, (100,0,0, 50), (0,0), [(10,10), (200,300), (10,300)], 50)
+    ptv.draw_alpha_polygon(canvas, (100,33,70,50), (0,0), [(10,30), (210,300), (10,280)], 50)
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
