@@ -14,7 +14,8 @@ if __name__ == '__main__':
     canvas_rect = canvas.get_rect()
     canvas.fill((0,0,0))
     seed_rect = seed.get_rect(left=seed.get_width())
-    #create canvas surface
+
+    # need to use pygame surfarrays
 
     SCREENW = seed.get_width() * 2
     SCREENH = seed.get_height()
@@ -23,10 +24,7 @@ if __name__ == '__main__':
 
     SCREEN.blit(seed, seed_rect)
 
-    # split screen vertically into two surfaces
-    # draw it to right surface
-
-
+    # color constants
     WHITE = pygame.Color(255, 255, 255)
 
 while True:
