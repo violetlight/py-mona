@@ -7,7 +7,7 @@ from os import path
 import random
 import sys
 
-import lib.ptvLIB as ptv # for transparent polygons
+import lib.ptvLIB as ptv # for drawing transparent polygons in Pygame
 
 
 class Polygon(object):
@@ -18,6 +18,8 @@ class Polygon(object):
 
 
 class Control(object):
+    """This is a general controller object/interface for the program."""
+
     def __init__(self, filepath):
         pygame.init()
         self.clock = pygame.time.Clock()
@@ -33,9 +35,6 @@ class Control(object):
         self.SCREEN_W = self.seed.get_width() * 2
         self.SCREEN_H = self.seed.get_height()
         self.dna = self.generate_dna()
-
-        # need to use pygame surfarrays
-
 
         self.SCREEN = pygame.display.set_mode((self.SCREEN_W, self.SCREEN_H))
         pygame.display.set_caption("Image evolver")
@@ -64,6 +63,7 @@ class Control(object):
 
 
     def loop(self):
+        """This is the infinite loop of the program"""
         while True:
 
             previous = self.canvas.copy()
@@ -72,6 +72,8 @@ class Control(object):
             self.mutate()
             self.draw_polygons()
             self.SCREEN.blit(self.canvas, self.canvas_rect)
+            print self.compare_surfaces(previous, self.canvas)
+
 
             old_fitness = self.compare_surfaces(previous, self.seed)
             current_fitness = self.compare_surfaces(self.canvas, self.seed)
@@ -80,27 +82,29 @@ class Control(object):
                 self.canvas = previous
 
             current_fitness = self.compare_surfaces(self.canvas, self.seed)
-            print "Current fitness: {}%".format(100-current_fitness)
+            # print "Current fitness: {}%".format(100-current_fitness)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
             pygame.display.update()
             self.clock.tick(120)
 
 
     def mutate(self):
+        """Make a random mutation to a randomly-chosen attribute of a
+        randomly-chosen polygon"""
         polygon = random.choice(self.dna)
         # a dice roll is decidedly random
-        diceroll = random.randint(0,2)
+        diceroll = random.randint(0,1)
         if diceroll == 0:
             polygon.points[random.randint(0, len(polygon.points)-1)] = [random.randint(0, self.SCREEN_W/2), random.randint(0, self.SCREEN_H)]
         if diceroll == 1:
             polygon.color[random.randint(0, 2)] = random.randint(0, 255)
-        if diceroll == 2:
-            polygon.alpha = random.randint(0,100)
+        # if diceroll == 2:
+        #     polygon.alpha = random.randint(0,100)
+
 
     def compare_surfaces(self, pg_canvas, pg_seed):
         """Returns a percentage. 0% means there is no difference between the
