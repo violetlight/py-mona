@@ -2,6 +2,7 @@
 import pygame
 import Image
 
+import copy
 from itertools import izip
 from os import path
 import random
@@ -107,7 +108,7 @@ class Control(object):
 
             # store 'mother' values in case she is more fit than 'daughter'
             previous_surface = self.canvas.copy()
-            previous_dna = self.dna
+            previous_dna = copy.deepcopy(self.dna)
 
             self.canvas.fill(self.WHITE)
             self.mutate() # this should alter self.dna
@@ -121,7 +122,7 @@ class Control(object):
 
             # keep whichever DNA is more fit
             if previous_difference < current_difference:
-                self.dna = previous_dna
+                self.dna = copy.deepcopy(previous_dna)
 
             # current_fitness = self.compare_surfaces(self.canvas, self.seed)
             # # this value never changes, but it should
