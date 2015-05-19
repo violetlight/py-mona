@@ -62,36 +62,6 @@ class Control(object):
             ptv.draw_alpha_polygon(self.canvas, polygon.color, (0,0), polygon.points, polygon.alpha)
 
 
-    def loop(self):
-        """This is the infinite loop of the program"""
-        while True:
-            previous = self.canvas.copy()
-            if self.canvas == previous:
-                print "it's the same this time"
-
-            self.canvas.fill(self.WHITE)
-            self.mutate()
-            self.draw_polygons()
-            self.SCREEN.blit(self.canvas, self.canvas_rect)
-
-            old_fitness = self.compare_surfaces(previous, self.seed)
-            current_fitness = self.compare_surfaces(self.canvas, self.seed)
-
-            if old_fitness < current_fitness:
-                self.canvas = previous
-
-            current_fitness = self.compare_surfaces(self.canvas, self.seed)
-            # this value never changes, but it should
-            print "Current fitness: {}%".format(100-current_fitness)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-            pygame.display.update()
-            self.clock.tick(120)
-
-
     def mutate(self):
         """Make a random mutation to a randomly-chosen attribute of a
         randomly-chosen polygon"""
@@ -127,3 +97,32 @@ class Control(object):
 
         ncomponents = i_canvas.size[0] * i_canvas.size[1] * 3
         return (dif / 255.0 * 100) / ncomponents
+
+    def loop(self):
+        """This is the infinite loop of the program"""
+        while True:
+            previous = self.canvas.copy()
+            if self.canvas == previous:
+                print "it's the same this time"
+
+            self.canvas.fill(self.WHITE)
+            self.mutate()
+            self.draw_polygons()
+            self.SCREEN.blit(self.canvas, self.canvas_rect)
+
+            old_fitness = self.compare_surfaces(previous, self.seed)
+            current_fitness = self.compare_surfaces(self.canvas, self.seed)
+
+            if old_fitness < current_fitness:
+                self.canvas = previous
+
+            current_fitness = self.compare_surfaces(self.canvas, self.seed)
+            # this value never changes, but it should
+            print "Current fitness: {}%".format(100-current_fitness)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            pygame.display.update()
+            self.clock.tick(120)
