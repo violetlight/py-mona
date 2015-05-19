@@ -101,24 +101,30 @@ class Control(object):
     def loop(self):
         """This is the infinite loop of the program"""
         while True:
-            previous = self.canvas.copy()
-            if self.canvas == previous:
-                print "it's the same this time"
+            # store 'mother' values in case she is more fit than 'daughter'
+            previous_surface = self.canvas.copy()
+            previous_dna = self.dna
 
             self.canvas.fill(self.WHITE)
-            self.mutate()
-            self.draw_polygons()
-            self.SCREEN.blit(self.canvas, self.canvas_rect)
+            self.mutate() # this should alter self.dna
+            self.draw_polygons() # this should alter self.canvas
 
-            old_fitness = self.compare_surfaces(previous, self.seed)
-            current_fitness = self.compare_surfaces(self.canvas, self.seed)
+            self.SCREEN.blit(self.canvas, self.canvas_rect) # draw it for visual response--better or worse
 
-            if old_fitness < current_fitness:
-                self.canvas = previous
+            # differences between surfaces and self.seed
+            previous_difference = self.compare_surfaces(previous_surface, self.seed)
+            current_difference = self.compare_surfaces(self.canvas, self.seed)
 
-            current_fitness = self.compare_surfaces(self.canvas, self.seed)
-            # this value never changes, but it should
-            print "Current fitness: {}%".format(100-current_fitness)
+            # keep whichever DNA is more fit
+            if previous_difference < current_difference:
+                self.dna = previous_dna
+
+            # current_fitness = self.compare_surfaces(self.canvas, self.seed)
+            # # this value never changes, but it should
+            # print "Current fitness: {}%".format(100-current_fitness)
+
+            # i feel like the output of this should always be going down...
+            print self.compare_surfaces(self.canvas, self.seed)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
