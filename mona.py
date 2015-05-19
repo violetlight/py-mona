@@ -26,7 +26,7 @@ class Control(object):
 
         # maybe try/exc here?
         # split the arg by slashes to enable dirs
-        self.seed = pygame.image.load(path.join(sys.argv[1]))
+        self.seed = pygame.image.load(path.join(filepath))
         self.canvas = self.seed.copy() # copy and clear so it matches bit depth of seed
         self.canvas_rect = self.canvas.get_rect()
         self.canvas.fill((0,0,0))
@@ -65,7 +65,6 @@ class Control(object):
     def loop(self):
         """This is the infinite loop of the program"""
         while True:
-
             previous = self.canvas.copy()
 
             self.canvas.fill(self.WHITE)
