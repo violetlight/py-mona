@@ -27,9 +27,9 @@ class Control(object):
         # maybe try/exc here?
         # split the arg by slashes to enable dirs
         self.seed = pygame.image.load(path.join(filepath))
-        self.canvas = self.seed.copy() # copy and clear so it matches bit depth of seed
+        self.canvas = self.seed.copy() # copy and ...
+        self.canvas.fill((0,0,0))      # ... clear it so it matchs the bit-depth of seed
         self.canvas_rect = self.canvas.get_rect()
-        self.canvas.fill((0,0,0))
         self.seed_rect = self.seed.get_rect(left=self.seed.get_width())
 
         self.SCREEN_W = self.seed.get_width() * 2
@@ -66,13 +66,13 @@ class Control(object):
         """This is the infinite loop of the program"""
         while True:
             previous = self.canvas.copy()
+            if self.canvas == previous:
+                print "it's the same this time"
 
             self.canvas.fill(self.WHITE)
             self.mutate()
             self.draw_polygons()
             self.SCREEN.blit(self.canvas, self.canvas_rect)
-            print self.compare_surfaces(previous, self.canvas)
-
 
             old_fitness = self.compare_surfaces(previous, self.seed)
             current_fitness = self.compare_surfaces(self.canvas, self.seed)
@@ -81,7 +81,8 @@ class Control(object):
                 self.canvas = previous
 
             current_fitness = self.compare_surfaces(self.canvas, self.seed)
-            # print "Current fitness: {}%".format(100-current_fitness)
+            # this value never changes, but it should
+            print "Current fitness: {}%".format(100-current_fitness)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
