@@ -92,7 +92,7 @@ class Control(object):
             # grayscale
             dif = sum(abs(p1-p2) for p1,p2 in pairs)
         else:
-            #color
+            # color
             dif = sum(abs(c1-c2) for p1,p2 in pairs for c1,c2 in zip(p1,p2))
 
         ncomponents = i_canvas.size[0] * i_canvas.size[1] * 3
@@ -101,6 +101,10 @@ class Control(object):
     def loop(self):
         """This is the infinite loop of the program"""
         while True:
+
+            # i feel like the output of this should always be going down...
+            print self.compare_surfaces(self.canvas, self.seed)
+
             # store 'mother' values in case she is more fit than 'daughter'
             previous_surface = self.canvas.copy()
             previous_dna = self.dna
@@ -122,9 +126,6 @@ class Control(object):
             # current_fitness = self.compare_surfaces(self.canvas, self.seed)
             # # this value never changes, but it should
             # print "Current fitness: {}%".format(100-current_fitness)
-
-            # i feel like the output of this should always be going down...
-            print self.compare_surfaces(self.canvas, self.seed)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
