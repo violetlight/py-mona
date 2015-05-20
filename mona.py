@@ -103,9 +103,6 @@ class Control(object):
         """This is the infinite loop of the program"""
         while True:
 
-            # i feel like the output of this should always be going down...
-            print self.compare_surfaces(self.canvas, self.seed)
-
             # store 'mother' values in case she is more fit than 'daughter'
             previous_surface = self.canvas.copy()
             previous_dna = copy.deepcopy(self.dna)
@@ -124,9 +121,8 @@ class Control(object):
             if previous_difference < current_difference:
                 self.dna = copy.deepcopy(previous_dna)
 
-            # current_fitness = self.compare_surfaces(self.canvas, self.seed)
-            # # this value never changes, but it should
-            # print "Current fitness: {}%".format(100-current_fitness)
+            current_fitness = self.compare_surfaces(self.canvas, self.seed)
+            print "Current fitness: {}%".format(100-current_difference)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
