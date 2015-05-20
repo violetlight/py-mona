@@ -46,7 +46,7 @@ class Control(object):
         self.WHITE = pygame.Color(255, 255, 255)
 
 
-    def generate_dna(self, polygons=50, vertices=4, alpha=50):
+    def generate_dna(self, polygons=100, vertices=6, alpha=50):
         dna = []
         for i in range(polygons):
             poly = Polygon(alpha)
