@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import pygame
-import Image
+from PIL import Image
 
 import copy
 from itertools import izip
