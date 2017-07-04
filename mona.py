@@ -84,8 +84,8 @@ class Control(object):
         canvas_str = pygame.image.tostring(pg_canvas, "RGBA")
         seed_str = pygame.image.tostring(pg_seed, "RGBA")
 
-        i_canvas = Image.fromstring("RGBA", pg_canvas.get_size(), canvas_str)
-        i_seed = Image.fromstring("RGBA", pg_seed.get_size(), seed_str)
+        i_canvas = Image.frombytes("RGBA", pg_canvas.get_size(), canvas_str)
+        i_seed = Image.frombytes("RGBA", pg_seed.get_size(), seed_str)
 
         pairs = izip(i_canvas.getdata(), i_seed.getdata())
 
